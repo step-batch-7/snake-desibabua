@@ -16,7 +16,8 @@
 --DONE-- * Change color of ghost snake
 
 
-* Generate food periodically
+--DONE-- * Generate food periodically
+
 * Allow snake to eat food when food becomes available
 * Upon eating the food, snake should grow tall
 * If snake touches itself or the walls, the game should be over

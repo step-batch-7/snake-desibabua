@@ -63,11 +63,16 @@ class Food {
   }
 }
 
+const getRandom = (limit) => Math.round(Math.random() * limit)
+
 class Game {
   constructor(snake, ghostSnake, food) {
     this.snake = snake;
     this.ghostSnake = ghostSnake;
     this.food = food;
+  }
+  generateNewFood(){
+    this.food = new Food(getRandom(100), getRandom(60))
   }
 }
 
@@ -111,6 +116,12 @@ const drawSnake = function (snake) {
   });
 };
 
+const eraseFood = function (food) {
+  let [colId, rowId] = food.position;
+  const cell = getCell(colId, rowId);
+  cell.classList.remove('food');
+}
+
 const drawFood = function (food) {
   let [colId, rowId] = food.position;
   const cell = getCell(colId, rowId);
@@ -152,7 +163,7 @@ const initGhostSnake = () => new Snake(
   'ghost'
 );
 
-const setUp = function(game){
+const setUp = function (game) {
   attachEventListeners(game.snake);
   createGrids();
   drawSnake(game.snake);
@@ -172,14 +183,21 @@ const randomlyTurnSnake = snake => {
   }
 };
 
+const createNewFood = function (game) {
+  eraseFood(game.food)
+  game.generateNewFood()
+  drawFood(game.food)
+}
+
 const main = function () {
   const snake = initSnake();
   const ghostSnake = initGhostSnake();
   const food = new Food(20, 20)
 
-  const game = new Game(snake,ghostSnake,food)
+  const game = new Game(snake, ghostSnake, food)
   setUp(game);
-  
-  setInterval(animateSnakes, 200,snake,ghostSnake);
-  setInterval(randomlyTurnSnake, 500,ghostSnake);
+
+  setInterval(animateSnakes, 200, snake, ghostSnake);
+  setInterval(randomlyTurnSnake, 500, ghostSnake);
+  setInterval(createNewFood, 10000 , game);
 };
