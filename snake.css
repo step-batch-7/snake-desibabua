@@ -16,6 +16,7 @@ h1 {
 }
 
 .snake {
+  border-radius: 30%;
   background-color: black;
 }
 
@@ -24,5 +25,6 @@ h1 {
 }
 
 .food {
+  border-radius: 30%;
   background-color: red;
 }
