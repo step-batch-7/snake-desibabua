@@ -77,6 +77,16 @@ class Snake {
   isDirection(dir) {
     return this.runningDirection == dir
   }
+
+  isOnFood(food) {
+    const [foodY, foodX] = food.position
+    const [snakeY, snakeX] = this.head
+    return snakeY == foodY && snakeX == foodX
+  }
+
+  isOnLocations(locations) {
+    return locations.some(([col,row])=>this.isOnCol(col) && this.isOnRow(row))
+  }
 }
 
 class Food {
@@ -102,9 +112,8 @@ class Game {
     this.food = new Food(getRandom(100), getRandom(60))
   }
 
-  isFoodEaten() {
-    const [foodColId, foodRowId] = this.food.position
-    return this.snake.location.some(([colId, rowId]) => colId == foodColId && rowId == foodRowId)
+  isFoodEaten(snake) {
+    return snake.isOnFood(this.food)
   }
 
   increaseSnakeSize() {
@@ -117,6 +126,18 @@ class Game {
     const isLeftTouched = snake.isOnCol(0) && snake.isDirection(WEST)
     const isRightTouched = snake.isOnCol(99) && snake.isDirection(EAST)
     return isTopTouched || isBottomTouched || isRightTouched || isLeftTouched
+  }
+
+  hasSnakeTouchedOwnBody() {
+    return this.snake.isOnLocations(this.snake.location.slice(0,-1))
+  }
+
+  hasSnakeTouchedGhostBody() {
+    return this.snake.isOnLocations(this.ghostSnake.location)
+  }
+
+  get isGameOver() {
+    return this.hasTouchedBoundary(this.snake) || this.hasSnakeTouchedOwnBody() || this.hasSnakeTouchedGhostBody()
   }
 }
 
@@ -216,9 +237,8 @@ const setUp = function (game) {
 }
 
 const animateSnakes = (game) => {
-  if (game.hasTouchedBoundary(game.snake)) {
-    alert('you_lost_game')
-    return;
+  if(game.isGameOver) {
+    alert('GAME_OVER')
   }
   if (game.hasTouchedBoundary(game.ghostSnake)) {
     game.ghostSnake.turnLeft();
@@ -235,12 +255,15 @@ const randomlyTurnSnake = (game) => {
 };
 
 const updateGame = function (game) {
-  if (game.isFoodEaten()) {
-    eraseFood(game.food)
+  eraseFood(game.food)
+  if (game.isFoodEaten(game.snake)) {
     game.increaseSnakeSize()
     game.generateNewFood()
-    drawFood(game.food)
   }
+  if (game.isFoodEaten(game.ghostSnake)) {
+    game.generateNewFood()
+  }
+  drawFood(game.food)
 }
 
 const main = function () {
@@ -253,5 +276,5 @@ const main = function () {
 
   setInterval(animateSnakes, 200, game);
   setInterval(randomlyTurnSnake, 500, game);
-  setInterval(updateGame, 100, game);
+  setInterval(updateGame, 200, game);
 };
