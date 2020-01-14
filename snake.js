@@ -35,12 +35,12 @@ class Snake {
   }
 
   get head() {
-    const snakeLocation = this.location
-    return snakeLocation[snakeLocation.length - 1]
+    const snakeLocation = this.location;
+    return snakeLocation[snakeLocation.length - 1];
   }
 
   get runningDirection() {
-    return this.direction.heading
+    return this.direction.heading;
   }
 
   get species() {
@@ -61,31 +61,32 @@ class Snake {
   }
 
   develop(food) {
-    if(food.kind == "food")
-    this.positions.unshift(this.previousTail);
+    if (food.kind == 'food') this.positions.unshift(this.previousTail);
   }
 
   isOnRow(row) {
     const [, snakeCurrentRow] = this.head;
-    return snakeCurrentRow == row
+    return snakeCurrentRow == row;
   }
 
   isOnCol(col) {
     const [snakeCurrentCol] = this.head;
-    return snakeCurrentCol == col
+    return snakeCurrentCol == col;
   }
 
   isDirection(dir) {
-    return this.runningDirection == dir
+    return this.runningDirection == dir;
   }
 
   isOnFood(food) {
-    const [foodY, foodX] = food.position
-    const [snakeY, snakeX] = this.head
-    return snakeY == foodY && snakeX == foodX
+    const [foodY, foodX] = food.position;
+    const [snakeY, snakeX] = this.head;
+    return snakeY == foodY && snakeX == foodX;
   }
 
   isOnLocations(locations) {
-    return locations.some(([col, row]) => this.isOnCol(col) && this.isOnRow(row))
+    return locations.some(
+      ([col, row]) => this.isOnCol(col) && this.isOnRow(row)
+    );
   }
 }

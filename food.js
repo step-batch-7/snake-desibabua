@@ -2,7 +2,7 @@ class Food {
   constructor(colId, rowId) {
     this.colId = colId;
     this.rowId = rowId;
-    this.type = randomFoodType()
+    this.type = randomFoodType();
   }
 
   get position() {
@@ -10,8 +10,8 @@ class Food {
   }
 
   get kind() {
-    return this.type
+    return this.type;
   }
 }
 
-const randomFoodType = () => getRandom(10) > 7 ? "specialFood" : "food"
+const randomFoodType = () => (getRandom(10) > 7 ? 'specialFood' : 'food');
