@@ -19,8 +19,8 @@ class Game {
     this.snake.develop();
   }
 
-  updateScore() {
-    this.score += 5
+  updateScore(increment) {
+    this.score += increment;
   }
 
   get currentScore() {
@@ -43,7 +43,14 @@ class Game {
     return this.snake.isOnLocations(this.ghostSnake.location)
   }
 
+  hasGhostTouchedSnakeBody() {
+    return this.ghostSnake.isOnLocations(this.snake.location)
+  }
+
   get isGameOver() {
-    return this.hasTouchedBoundary(this.snake) || this.hasSnakeTouchedOwnBody() || this.hasSnakeTouchedGhostBody()
+    return this.hasTouchedBoundary(this.snake) 
+    || this.hasSnakeTouchedOwnBody() 
+    || this.hasSnakeTouchedGhostBody() 
+    || this.hasGhostTouchedSnakeBody()
   }
 }

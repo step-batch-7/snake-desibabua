@@ -121,7 +121,7 @@ const updateGame = function (game) {
   if (game.isFoodEaten(game.snake)) {
     game.increaseSnakeSize()
     game.generateNewFood()
-    game.updateScore()
+    game.updateScore(5)
   }
   if (game.isFoodEaten(game.ghostSnake)) {
     game.generateNewFood()
