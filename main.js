@@ -52,7 +52,7 @@ const drawFood = function (food) {
 
 const displayScore = function (newScore) {
   const score = document.getElementById('score')
-  score.innerText = newScore;
+  score.innerText = newScore.currentScore;
 }
 
 const handleKeyPress = snake => {
@@ -121,22 +121,22 @@ const updateGame = function (game) {
   if (game.isFoodEaten(game.snake)) {
     game.increaseSnakeSize()
     game.generateNewFood()
-    game.updateScore(5)
+    game.score.updateScore(5)
   }
   if (game.isFoodEaten(game.ghostSnake)) {
     game.generateNewFood()
   }
   drawFood(game.food)
-  displayScore(game.currentScore)
+  displayScore(game.score)
 }
 
 const main = function () {
   const snake = initSnake();
   const ghostSnake = initGhostSnake();
   const food = new Food(20, 20);
-  const initialScore = 0;
+  const score = new Score(0)
 
-  const game = new Game(snake, ghostSnake, food, initialScore)
+  const game = new Game(snake, ghostSnake, food, score)
   setUp(game);
 
   setInterval(animateSnakes, 50, game);

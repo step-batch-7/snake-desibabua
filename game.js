@@ -1,11 +1,11 @@
 const getRandom = (limit) => Math.round(Math.random() * limit)
 
 class Game {
-  constructor(snake, ghostSnake, food, initialScore) {
+  constructor(snake, ghostSnake, food,score) {
     this.snake = snake;
     this.ghostSnake = ghostSnake;
-    this.food = food;
-    this.score = initialScore
+    this.food = food
+    this.score = score
   }
   generateNewFood() {
     this.food = new Food(getRandom(100), getRandom(60))
@@ -17,14 +17,6 @@ class Game {
 
   increaseSnakeSize() {
     this.snake.develop();
-  }
-
-  updateScore(increment) {
-    this.score += increment;
-  }
-
-  get currentScore() {
-    return this.score;
   }
 
   hasTouchedBoundary(snake) {
