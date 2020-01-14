@@ -16,7 +16,7 @@ class Game {
   }
 
   increaseSnakeSize() {
-    this.snake.develop();
+    this.snake.develop(this.food);
   }
 
   hasTouchedBoundary(snake) {

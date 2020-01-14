@@ -27,4 +27,4 @@
 --Done-- * Give the ghost snake the ability to eat the food.
 
 --Done-- * Add a scoring mechanism
-* Provide a special type of food that increases the score without changing the length of the snake.
+--Done-- * Provide a special type of food that increases the score without changing the length of the snake.

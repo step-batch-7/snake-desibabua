@@ -60,7 +60,8 @@ class Snake {
     this.positions.push([headX + deltaX, headY + deltaY]);
   }
 
-  develop() {
+  develop(food) {
+    if(food.kind == "food")
     this.positions.unshift(this.previousTail);
   }
 

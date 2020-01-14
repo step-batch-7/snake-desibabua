@@ -41,13 +41,13 @@ const drawSnake = function (snake) {
 const eraseFood = function (food) {
   let [colId, rowId] = food.position;
   const cell = getCell(colId, rowId);
-  cell.classList.remove('food');
+  cell.classList.remove(food.kind);
 }
 
 const drawFood = function (food) {
   let [colId, rowId] = food.position;
   const cell = getCell(colId, rowId);
-  cell.classList.add('food');
+  cell.classList.add(food.kind);
 };
 
 const displayScore = function (newScore) {
@@ -100,6 +100,7 @@ const setUp = function (game) {
 
 const animateSnakes = (game) => {
   if (game.isGameOver) {
+    // game.snake.turnLeft();
     return;
   }
   if (game.hasTouchedBoundary(game.ghostSnake)) {
@@ -119,15 +120,15 @@ const randomlyTurnSnake = (game) => {
 const updateGame = function (game) {
   eraseFood(game.food)
   if (game.isFoodEaten(game.snake)) {
+    game.score.updateScore(game.food)
     game.increaseSnakeSize()
     game.generateNewFood()
-    game.score.updateScore(5)
   }
   if (game.isFoodEaten(game.ghostSnake)) {
     game.generateNewFood()
   }
-  drawFood(game.food)
   displayScore(game.score)
+  drawFood(game.food)
 }
 
 const main = function () {

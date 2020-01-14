@@ -3,8 +3,11 @@ class Score {
     this.score = initialScore;
   }
 
-  updateScore(increment) {
-    this.score += increment;
+  updateScore(food) {
+    if (food.kind == "specialFood") {
+      this.score += 5
+    }
+    this.score += 5;
   }
 
   get currentScore() {
