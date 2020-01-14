@@ -26,5 +26,5 @@
 --Done-- * The game ends when your snake touches the ghost snake.
 --Done-- * Give the ghost snake the ability to eat the food.
 
-* Add a scoring mechanism
+--Done-- * Add a scoring mechanism
 * Provide a special type of food that increases the score without changing the length of the snake.

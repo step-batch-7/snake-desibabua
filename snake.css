@@ -4,6 +4,7 @@ h1 {
 
 #grid {
   width: 800px;
+  height:480px;
   display: flex;
   margin: 0 auto;
   flex-wrap: wrap;
@@ -27,4 +28,18 @@ h1 {
 .food {
   border-radius: 30%;
   background-color: red;
+}
+
+.scoreCard {
+  width: 200px;
+  height:50px;
+  display: flex;
+  margin: 20px auto;
+  flex-wrap: wrap;
+  border: 1px solid black;
+  border-radius: 20%;
+  background-color:rgb(199, 234, 239);;
+}
+h2 {
+  margin:auto;
 }
