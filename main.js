@@ -9,6 +9,11 @@ const getCellId = (colId, rowId) => colId + '_' + rowId;
 const getCell = (colId, rowId) =>
   document.getElementById(getCellId(colId, rowId));
 
+const gameOver = ()=>{
+  const gridBoard = document.getElementById('grid')
+  gridBoard.style = "opacity:0"
+}
+
 const createCell = function(grid, colId, rowId) {
   const cell = document.createElement('div');
   cell.className = 'cell';
@@ -102,6 +107,7 @@ const setUp = function(game) {
 const animateSnakes = game => {
   if (game.isGameOver) {
     // game.snake.turnLeft();
+    gameOver()
     return;
   }
   if (game.hasTouchedBoundary(game.ghostSnake)) {
