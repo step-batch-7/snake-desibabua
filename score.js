@@ -4,7 +4,7 @@ class Score {
   }
 
   updateScore(food) {
-    if (food.kind == 'specialFood') {
+    if (food.isSpecialFood) {
       this.score += 5;
     }
     this.score += 5;

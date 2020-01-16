@@ -1,5 +1,5 @@
 #gameOverBoard {
-  background-color: rgb(240, 231, 248);
+  background-color: rgb(228, 220, 236);
 }
 
 .over {
@@ -51,8 +51,7 @@ h1 {
   background-color: red;
 }
 
-.specialFood {
-  border-radius: 80%;
+.special{
   background-color: blue;
 }
 

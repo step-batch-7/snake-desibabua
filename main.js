@@ -9,10 +9,10 @@ const getCellId = (colId, rowId) => colId + '_' + rowId;
 const getCell = (colId, rowId) =>
   document.getElementById(getCellId(colId, rowId));
 
-const gameOver = ()=>{
-  const gridBoard = document.getElementById('grid')
-  gridBoard.style = "opacity:0"
-}
+const gameOver = () => {
+  const gridBoard = document.getElementById('grid');
+  gridBoard.style = 'opacity:0';
+};
 
 const createCell = function(grid, colId, rowId) {
   const cell = document.createElement('div');
@@ -46,13 +46,15 @@ const drawSnake = function(snake) {
 const eraseFood = function(food) {
   let [colId, rowId] = food.position;
   const cell = getCell(colId, rowId);
-  cell.classList.remove(food.kind);
+  cell.classList.remove('food');
+  if (food.isSpecialFood) cell.classList.remove('special');
 };
 
 const drawFood = function(food) {
   let [colId, rowId] = food.position;
   const cell = getCell(colId, rowId);
-  cell.classList.add(food.kind);
+  cell.classList.add('food');
+  if (food.isSpecialFood) cell.classList.add('special');
 };
 
 const displayScore = function(newScore) {
@@ -107,7 +109,7 @@ const setUp = function(game) {
 const animateSnakes = game => {
   if (game.isGameOver) {
     // game.snake.turnLeft();
-    gameOver()
+    gameOver();
     return;
   }
   if (game.hasTouchedBoundary(game.ghostSnake)) {

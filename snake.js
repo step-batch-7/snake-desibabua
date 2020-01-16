@@ -61,7 +61,7 @@ class Snake {
   }
 
   develop(food) {
-    if (food.kind == 'food') this.positions.unshift(this.previousTail);
+    if (!food.isSpecialFood) this.positions.unshift(this.previousTail);
   }
 
   isOnRow(row) {

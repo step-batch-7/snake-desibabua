@@ -9,8 +9,8 @@ class Food {
     return [this.colId, this.rowId];
   }
 
-  get kind() {
-    return this.type;
+  get isSpecialFood() {
+    return this.type == "specialFood";
   }
 }
 
