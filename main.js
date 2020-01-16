@@ -107,10 +107,6 @@ const setUp = function(game) {
 };
 
 const animateSnakes = game => {
-  if (game.isGameOver) {
-    gameOver();
-    return;
-  }
   moveAndDrawSnake(game.snake);
   moveAndDrawSnake(game.ghostSnake);
 };
@@ -123,6 +119,11 @@ const randomlyTurnSnake = game => {
 };
 
 const updateGame = function(game) {
+  if (game.isGameOver) {
+    gameOver();
+    return;
+  }
+  animateSnakes(game)
   eraseFood(game.food);
   game.updateStatus();
   displayScore(game.score);
@@ -141,7 +142,6 @@ const main = function() {
   const game = getGame();
   setUp(game);
 
-  setInterval(animateSnakes, 50, game);
   setInterval(randomlyTurnSnake, 500, game);
-  setInterval(updateGame, 10, game);
+  setInterval(updateGame, 50, game);
 };
