@@ -19,6 +19,17 @@ class Game {
     this.snake.develop(this.food);
   }
 
+  updateStatus() {
+    if (this.isFoodEaten(this.snake)) {
+      this.score.updateScore(this.food);
+      this.increaseSnakeSize();
+      this.generateNewFood();
+    }
+    if (this.isFoodEaten(this.ghostSnake)) {
+      this.generateNewFood();
+    }
+  }
+
   hasTouchedBoundary(snake) {
     const isTopTouched = snake.isOnRow(0) && snake.isDirection(NORTH);
     const isBottomTouched = snake.isOnRow(59) && snake.isDirection(SOUTH);

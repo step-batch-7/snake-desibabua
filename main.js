@@ -128,14 +128,7 @@ const randomlyTurnSnake = game => {
 
 const updateGame = function(game) {
   eraseFood(game.food);
-  if (game.isFoodEaten(game.snake)) {
-    game.score.updateScore(game.food);
-    game.increaseSnakeSize();
-    game.generateNewFood();
-  }
-  if (game.isFoodEaten(game.ghostSnake)) {
-    game.generateNewFood();
-  }
+  game.updateStatus();
   displayScore(game.score);
   drawFood(game.food);
 };
