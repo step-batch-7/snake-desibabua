@@ -28,6 +28,9 @@ class Game {
     if (this.isFoodEaten(this.ghostSnake)) {
       this.generateNewFood();
     }
+    if (this.hasTouchedBoundary(this.ghostSnake)) {
+      this.ghostSnake.turnLeft();
+    }
   }
 
   hasTouchedBoundary(snake) {

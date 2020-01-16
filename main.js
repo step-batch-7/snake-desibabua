@@ -108,12 +108,8 @@ const setUp = function(game) {
 
 const animateSnakes = game => {
   if (game.isGameOver) {
-    // game.snake.turnLeft();
     gameOver();
     return;
-  }
-  if (game.hasTouchedBoundary(game.ghostSnake)) {
-    game.ghostSnake.turnLeft();
   }
   moveAndDrawSnake(game.snake);
   moveAndDrawSnake(game.ghostSnake);
