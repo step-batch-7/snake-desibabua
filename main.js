@@ -140,13 +140,16 @@ const updateGame = function(game) {
   drawFood(game.food);
 };
 
-const main = function() {
+const getGame = function() {
   const snake = initSnake();
   const ghostSnake = initGhostSnake();
   const food = new Food(20, 20);
   const score = new Score(0);
+  return new Game(snake, ghostSnake, food, score);
+};
 
-  const game = new Game(snake, ghostSnake, food, score);
+const main = function() {
+  const game = getGame();
   setUp(game);
 
   setInterval(animateSnakes, 50, game);
