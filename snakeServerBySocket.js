@@ -1,5 +1,6 @@
 const { Server } = require('net');
 const { readFileSync } = require('fs');
+const CURRENT_DIR = __dirname;
 
 const getDefaultMsg = () => {
   return [
@@ -11,23 +12,29 @@ const getDefaultMsg = () => {
   ].join('\n');
 };
 
-const getUrl = url => {
-  if (url === '/') return './index.html';
-  return `./${url}`;
+const getUrl = (url, lookUp, extension) => {
+  if (url === '/') return `${CURRENT_DIR}/index.html`;
+  return `${CURRENT_DIR}/public/${lookUp[extension].dir}/${url}`;
 };
 
-const getType = url => {
-  const lookUp = { js: 'text/javascript', css: 'text/css', jpg: 'image/jpeg' };
-  const [, extension] = url.split('.');
-  return extension ? lookUp[extension] : 'html';
+const getType = (extension, lookUp) => {
+  return extension ? lookUp[extension].type : 'html';
 };
 
 const getMsg = function(url) {
-  const fileContent = readFileSync(getUrl(url));
+  const lookUp = {
+    js: { dir: 'js', type: 'text/javascript' },
+    css: { dir: 'css', type: 'text/css' },
+    jpg: { dir: 'images', type: 'image/jpeg' }
+  };
+
+  const [, extension] = url.split('.');
+
+  const fileContent = readFileSync(getUrl(url, lookUp, extension));
 
   const goodMsg = [
     `HTTP/1.1 200`,
-    `Content-Type: ${getType(url)}`,
+    `Content-Type: ${getType(extension, lookUp)}`,
     `Content-Length: ${fileContent.length}`,
     '',
     ''
