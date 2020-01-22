@@ -68,3 +68,8 @@ h1 {
 h2 {
   margin: auto;
 }
+
+body {
+  background-image: url('./background.jpg');
+  background-size: cover;
+}
