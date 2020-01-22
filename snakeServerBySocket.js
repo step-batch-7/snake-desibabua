@@ -17,23 +17,22 @@ const getUrl = url => {
 };
 
 const getType = url => {
-  const lookUp = { js: 'javascript', css: 'css' };
+  const lookUp = { js: 'text/javascript', css: 'text/css', jpg: 'image/jpeg' };
   const [, extension] = url.split('.');
   return extension ? lookUp[extension] : 'html';
 };
 
 const getMsg = function(url) {
-  const html = readFileSync(getUrl(url), 'utf8');
+  const fileContent = readFileSync(getUrl(url));
 
   const goodMsg = [
     `HTTP/1.1 200`,
-    `Content-Type: text/${getType(url)}`,
-    `Content-Length: ${html.length}`,
+    `Content-Type: ${getType(url)}`,
+    `Content-Length: ${fileContent.length}`,
     '',
     ''
   ].join('\n');
-
-  return `${goodMsg}${html}`;
+  return [`${goodMsg}`, fileContent];
 };
 
 const getSocketNeed = text => {
@@ -55,7 +54,8 @@ const handleConnection = function(socket) {
   const remote = `${socket.remoteAddress} : ${socket.remotePort}`;
   console.log(`connection established with ${remote}`);
   socket.on('data', data => {
-    socket.write(getResponseMsg(data));
+    const response = getResponseMsg(data);
+    response.forEach(element => socket.write(element));
   });
   socket.on('error', e => console.log(`error happened in socket ${e}`));
   socket.on('end', () => console.log(`socket ended ${remote}`));
