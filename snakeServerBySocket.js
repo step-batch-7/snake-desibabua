@@ -69,6 +69,7 @@ const getUrlNeeds = function(url) {
   const lookUp = {
     js: { dir: 'js', type: 'text/javascript' },
     css: { dir: 'css', type: 'text/css' },
+    ico: { dir: 'images', type: 'image/jpeg' },
     jpg: { dir: 'images', type: 'image/jpeg' },
     html: { dir: 'html', type: 'text/html' }
   };
