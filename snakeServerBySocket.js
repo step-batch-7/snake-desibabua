@@ -1,5 +1,5 @@
 const { Server } = require('net');
-const { readFileSync } = require('fs');
+const { readFileSync, readdirSync } = require('fs');
 const SERVING_DIR = `${__dirname}/public`;
 
 const collectHeadersAndContent = (result, line) => {
@@ -16,6 +16,11 @@ const collectHeadersAndContent = (result, line) => {
   return result;
 };
 
+const getReqFileName = function(reqUrl) {
+  const [, fileName] = reqUrl.split('/');
+  return fileName ? fileName : `index.html`;
+};
+
 class Request {
   constructor(method, url, header, body) {
     this.method = method;
@@ -30,7 +35,7 @@ class Request {
     const { headers, body } = headersAndBody.reduce(collectHeadersAndContent, {
       headers: {}
     });
-    const url = reqUrl === '/' ? `/index.html` : reqUrl;
+    const url = getReqFileName(reqUrl);
     const req = new Request(method, url, headers, body);
     console.error(req);
     return req;
@@ -67,17 +72,17 @@ class Response {
 
 const getUrlNeeds = function(url) {
   const lookUp = {
-    js: { dir: 'js', type: 'text/javascript' },
-    css: { dir: 'css', type: 'text/css' },
-    ico: { dir: 'images', type: 'image/jpeg' },
-    jpg: { dir: 'images', type: 'image/jpeg' },
-    html: { dir: 'html', type: 'text/html' }
+    js: { dir: 'js/', type: 'text/javascript' },
+    css: { dir: 'css/', type: 'text/css' },
+    ico: { dir: 'images/', type: 'image/jpeg' },
+    jpg: { dir: 'images/', type: 'image/jpeg' },
+    html: { dir: 'html/', type: 'text/html' }
   };
 
   const [, urlType] = url.split('.');
 
   const contentType = lookUp[urlType].type;
-  const absUrl = `${SERVING_DIR}/${lookUp[urlType].dir}${url}`;
+  const absUrl = `${SERVING_DIR}/${lookUp[urlType].dir}/${url}`;
   return { contentType, absUrl };
 };
 
@@ -92,8 +97,15 @@ const servePage = function(req) {
   return res;
 };
 
+const getDirContent = function(path = '') {
+  const dirToRead = `${SERVING_DIR}/${path}`;
+  return readdirSync(dirToRead, 'utf-8');
+};
+
 const findHandler = req => {
-  if (req.method === 'GET') return servePage;
+  const allowedUrl = getDirContent().flatMap(dir => getDirContent(dir));
+  
+  if (req.method === 'GET' && allowedUrl.includes(req.url)) return servePage;
   return () => new Response();
 };
 
