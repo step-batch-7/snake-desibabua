@@ -1,6 +1,15 @@
 const { Server } = require('net');
-const { readFileSync, readdirSync } = require('fs');
+const { readFileSync, existsSync, statSync } = require('fs');
 const SERVING_DIR = `${__dirname}/public`;
+
+const lookUp = {
+  js: { dir: 'js', type: 'text/javascript' },
+  css: { dir: 'css', type: 'text/css' },
+  ico: { dir: 'images', type: 'image/jpeg' },
+  jpg: { dir: 'images', type: 'image/jpeg' },
+  html: { dir: 'html', type: 'text/html' },
+  '/': { dir: 'html', type: 'text/html' }
+};
 
 const collectHeadersAndContent = (result, line) => {
   if (line === '') {
@@ -16,9 +25,17 @@ const collectHeadersAndContent = (result, line) => {
   return result;
 };
 
-const getReqFileName = function(reqUrl) {
-  const [, fileName] = reqUrl.split('/');
-  return fileName ? fileName : `index.html`;
+const getReqFileName = function(url) {
+  const lookUpForFile = {
+    '/': '/index.html',
+    '/registeredUser': '/snakeGame.html'
+  };
+  const fileName = lookUpForFile[url] ? lookUpForFile[url] : url;
+
+  const [, urlType] = url.match(/.*\.(.*)$/) || [, '/'];
+  const absUrl = `${SERVING_DIR}/${lookUp[urlType].dir}${fileName}`;
+
+  return absUrl;
 };
 
 class Request {
@@ -30,11 +47,13 @@ class Request {
   }
 
   static parse(data) {
+    //'index.html?userId='
     const [requestLine, ...headersAndBody] = data.split('\r\n');
-    const [method, reqUrl, protocol] = requestLine.split(' ');
+    const [method, fileAndKeyValuePairs, protocol] = requestLine.split(' ');
     const { headers, body } = headersAndBody.reduce(collectHeadersAndContent, {
       headers: {}
     });
+    const [reqUrl, keyValuePairs] = fileAndKeyValuePairs.split('?');
     const url = getReqFileName(reqUrl);
     const req = new Request(method, url, headers, body);
     console.error(req);
@@ -70,42 +89,30 @@ class Response {
   }
 }
 
-const getUrlNeeds = function(url) {
-  const lookUp = {
-    js: { dir: 'js/', type: 'text/javascript' },
-    css: { dir: 'css/', type: 'text/css' },
-    ico: { dir: 'images/', type: 'image/jpeg' },
-    jpg: { dir: 'images/', type: 'image/jpeg' },
-    html: { dir: 'html/', type: 'text/html' }
-  };
-
+const getContentType = function(url) {
   const [, urlType] = url.split('.');
-
   const contentType = lookUp[urlType].type;
-  const absUrl = `${SERVING_DIR}/${lookUp[urlType].dir}/${url}`;
-  return { contentType, absUrl };
+  return { contentType };
 };
 
 const servePage = function(req) {
   const res = new Response();
   res.statusCode = 200;
-  const { contentType, absUrl } = getUrlNeeds(req.url);
-  const content = readFileSync(absUrl);
+  const { contentType } = getContentType(req.url);
+  const content = readFileSync(req.url);
   res.setHeader('Content-Type', contentType);
   res.setHeader('Content-Length', content.length);
   res.body = content;
   return res;
 };
 
-const getDirContent = function(path = '') {
-  const dirToRead = `${SERVING_DIR}/${path}`;
-  return readdirSync(dirToRead, 'utf-8');
+const isFilePresent = function(path) {
+  const stat = existsSync(path) && statSync(path).isFile();
+  return stat;
 };
 
 const findHandler = req => {
-  const allowedUrl = getDirContent().flatMap(dir => getDirContent(dir));
-  
-  if (req.method === 'GET' && allowedUrl.includes(req.url)) return servePage;
+  if (req.method === 'GET' && isFilePresent(req.url)) return servePage;
   return () => new Response();
 };
 
